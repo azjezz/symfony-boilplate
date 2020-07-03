@@ -1,0 +1,26 @@
+<nav class="uk-navbar-container uk-navbar-transparent uk-padding uk-padding-remove-vertical" uk-navbar>
+    <div class="uk-navbar-left">
+        <ul class="uk-navbar-nav">
+            <li class="uk-active"><a href="{{ path('index') }}">{{ site_name }}</a></li>
+        </ul>
+    </div>
+    <div class="uk-navbar-right">
+        <ul class="uk-navbar-nav">
+            {% if app.user %}
+                <li>
+                    <a href="#">{{ app.user.username }}</a>
+                    <div class="uk-navbar-dropdown">
+                        <ul class="uk-nav uk-navbar-dropdown-nav">
+                            <li><a href="{{ path('account_settings') }}">Settings</a></li>
+                            <li class="uk-nav-divider"></li>
+                            <li><a href="{{ path('user_logout') }}">Logout</a></li>
+                        </ul>
+                    </div>
+                </li>
+            {% else %}
+                <li><a href="{{ path('user_register') }}">Register</a></li>
+                <li><a href="{{ path('user_login') }}">Login</a></li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>

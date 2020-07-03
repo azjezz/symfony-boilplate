@@ -1,0 +1,30 @@
+#!/bin/sh
+
+rm -rf vendor/
+rm -rf node_modules/
+
+if [ "dev" = "$APP_ENV" ]; then
+  composer install --no-scripts --no-interaction
+  yarn install
+  rm -rf var/cache
+  symfony console cache:clear --no-warmup
+  symfony console cache:warmup
+  symfony console assets:install
+  yarn dev
+else
+  symfony server:prod
+  composer install --no-scripts --no-interaction --no-dev -o
+  yarn install
+  rm -rf var/cache
+  symfony console cache:clear --no-warmup
+  symfony console cache:warmup
+  symfony console assets:install
+  yarn build
+  composer dump-autoload --no-dev --classmap-authoritative
+  composer dump-env prod
+fi
+
+symfony console d:m:m --no-interaction
+symfony console messenger:setup-transports --no-interaction
+
+symfony serve --allow-http --no-tls --port=8000

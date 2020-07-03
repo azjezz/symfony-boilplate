@@ -1,0 +1,13 @@
+{% extends 'layout/wide.html.twig' %}
+
+{% block title %}{{ status_code }} {{ status_text }} - {{ site_name }}{% endblock %}
+
+{% block header %}{{ status_code }}  —  {{ status_text }}{% endblock %}
+
+{% block content %}
+    {% if status_code == 500 %}
+        <p>Things are a little unstable here. </p>
+    {% else %}
+        <p>We are currently unable to handle this request. </p>
+    {% endif %}
+{% endblock %}

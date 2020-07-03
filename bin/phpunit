@@ -1,0 +1,18 @@
+#!/usr/bin/env php
+<?php
+
+if (!in_array(PHP_SAPI, ['cli', 'phpdbg', 'embed'], true)) {
+    printf('PHPUnit can only be invoked via the CLI version of PHP, not the %s SAPI.%s' . PHP_SAPI, PHP_EOL);
+    exit(1);
+}
+
+if (!file_exists(dirname(__DIR__).'/vendor/symfony/phpunit-bridge/bin/simple-phpunit.php')) {
+    printf('Unable to find the `simple-phpunit.php` script in `vendor/symfony/phpunit-bridge/bin/`.%s', PHP_EOL);
+    exit(1);
+}
+
+if (false === getenv('SYMFONY_PHPUNIT_DIR')) {
+    putenv('SYMFONY_PHPUNIT_DIR='.__DIR__.'/.phpunit');
+}
+
+require dirname(__DIR__).'/vendor/symfony/phpunit-bridge/bin/simple-phpunit.php';

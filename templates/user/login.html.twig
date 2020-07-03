@@ -1,0 +1,35 @@
+{% extends 'layout/form.html.twig' %}
+
+{% block title %}Login - {{ site_name }}{% endblock %}
+
+{% block header %}Login{% endblock %}
+
+{% block form %}
+    <form class="uk-form-stacked" method="POST">
+        <fieldset class="uk-fieldset uk-padding-remove-top">
+            {% if error %}
+                <div class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% endif %}
+            <div class="uk-margin uk-margin-remove-top">
+                <div class="uk-inline uk-width-1-1">
+                    <span class="uk-form-icon" uk-icon="icon: user"></span>
+                    <input id="input-username" class="uk-input" type="text" name="username" placeholder="username" value="{{ last_username }}">
+                </div>
+            </div>
+            <div class="uk-margin">
+                <div class="uk-inline uk-width-1-1">
+                    <span class="uk-form-icon" uk-icon="icon: lock"></span>
+                    <input id="input-password" class="uk-input" type="password" name="password" placeholder="password">
+                </div>
+            </div>
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" />
+            <div class="uk-margin uk-margin-remove-bottom">
+                <input class="uk-button uk-button-large uk-button-default uk-width-1-1" type="submit" value="Continue" />
+            </div>
+        </fieldset>
+    </form>
+{% endblock %}
+
+{% block bottom %}
+    Can't login? <a href="{{ path('user_password_reset_request') }}">reset your password</a>.
+{% endblock %}

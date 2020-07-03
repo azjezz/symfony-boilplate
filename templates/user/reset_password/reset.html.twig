@@ -1,0 +1,38 @@
+{% extends 'layout/form.html.twig' %}
+
+{% block title %}Password Reset - {{ site_name }}{% endblock %}
+
+{% block header %}Password Reset{% endblock %}
+
+{% block form %}
+    {{ form_start(form, {'attr': {'class': 'uk-form-stacked'}}) }}
+    <fieldset class="uk-fieldset uk-padding-remove-top">
+        {% for error in errors %}
+            <div class="uk-alert-danger" uk-alert><a class="uk-alert-close"
+                                                     uk-close></a>{{ error.getMessageTemplate()|trans(error.getMessageParameters(), 'validation') }}
+            </div>
+        {% endfor %}
+        <div class="uk-margin uk-margin-remove-top">
+            <div class="uk-inline uk-width-1-1">
+                <span class="uk-form-icon" uk-icon="icon: lock"></span>
+                {{ form_widget(form.plainPassword.first, {'attr': {'class': 'uk-input', 'placeholder': 'password'}}) }}
+            </div>
+        </div>
+
+        <div class="uk-margin uk-margin-remove-top">
+            <div class="uk-inline uk-width-1-1">
+                <span class="uk-form-icon" uk-icon="icon: lock"></span>
+                {{ form_widget(form.plainPassword.second, {'attr': {'class': 'uk-input', 'placeholder': 'confirmation'}}) }}
+            </div>
+        </div>
+
+        <div class="uk-margin uk-margin-remove-bottom">
+            <input class="uk-button uk-button-large uk-button-default uk-width-1-1" type="submit" value="Reset"/>
+        </div>
+    </fieldset>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block _bottom %}
+    {# no card footer #}
+{% endblock %}

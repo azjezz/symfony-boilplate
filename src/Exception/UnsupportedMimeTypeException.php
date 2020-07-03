@@ -1,0 +1,46 @@
+<?php
+
+/*
+ * This file is part of Sanyu.
+ *
+ * (c) Saif Eddin Gmati
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
+
+namespace App\Exception;
+
+use InvalidArgumentException;
+use Psl\Str;
+use Throwable;
+
+final class UnsupportedMimeTypeException extends InvalidArgumentException implements ExceptionInterface
+{
+    private iterable $supportedMimeTypes;
+
+    private string  $suppliedMimeType;
+
+    public function __construct(iterable $supportedMimeTypes, ?string $suppliedMimeType, int $code = 0, Throwable $previous = null)
+    {
+        $this->supportedMimeTypes = $supportedMimeTypes;
+        $this->suppliedMimeType = $suppliedMimeType ?? '(unknown)';
+        parent::__construct(Str\format(
+            'Unsupported mime type "%s", only the following mime types are supported: %s.',
+            $suppliedMimeType,
+            Str\join($supportedMimeTypes, ',')
+        ), $code, $previous);
+    }
+
+    public function getSupportedMimeTypes(): iterable
+    {
+        return $this->supportedMimeTypes;
+    }
+
+    public function getSuppliedMimeType(): string
+    {
+        return $this->suppliedMimeType;
+    }
+}

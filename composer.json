@@ -1,0 +1,118 @@
+{
+    "type": "project",
+    "license": "MIT",
+    "require": {
+        "php": "^7.4",
+        "ext-ctype": "*",
+        "ext-iconv": "*",
+        "ext-intl": "*",
+        "ext-json": "*",
+        "azjezz/psl": "dev-master",
+        "symfony/asset": "^5.1",
+        "symfony/console": "^5.1",
+        "symfony/dotenv": "^5.1",
+        "symfony/expression-language": "^5.1",
+        "symfony/flex": "^1.3.1",
+        "symfony/form": "^5.1",
+        "symfony/framework-bundle": "^5.1",
+        "symfony/intl": "^5.1",
+        "symfony/mailer": "^5.1",
+        "symfony/monolog-bundle": "^3.1",
+        "symfony/notifier": "^5.1",
+        "symfony/orm-pack": "^1.0",
+        "symfony/polyfill-php80": "^1.15",
+        "symfony/process": "^5.1",
+        "symfony/security-bundle": "^5.1",
+        "symfony/serializer-pack": "^1.0",
+        "symfony/string": "^5.1",
+        "symfony/twig-pack": "^1.0",
+        "symfony/validator": "^5.1",
+        "symfony/web-link": "^5.1",
+        "symfony/webpack-encore-bundle": "^1.7",
+        "symfony/yaml": "^5.1",
+        "symfonycasts/reset-password-bundle": "^1.1"
+    },
+    "require-dev": {
+        "doctrine/doctrine-fixtures-bundle": "^3.3",
+        "friendsofphp/php-cs-fixer": "^2.16",
+        "liip/test-fixtures-bundle": "^1.0.0",
+        "symfony/debug-pack": "^1.0",
+        "symfony/maker-bundle": "^1.5",
+        "symfony/profiler-pack": "^1.0",
+        "symfony/test-pack": "^1.0",
+        "vimeo/psalm": "^3.8"
+    },
+    "config": {
+        "preferred-install": {
+            "*": "dist"
+        },
+        "sort-packages": true
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "App\\Tests\\": "tests/"
+        }
+    },
+    "replace": {
+        "paragonie/random_compat": "2.*",
+        "symfony/polyfill": "*",
+        "symfony/polyfill-ctype": "*",
+        "symfony/polyfill-int": "*",
+        "symfony/polyfill-php72": "*",
+        "symfony/polyfill-php73": "*",
+        "symfony/polyfill-php74": "*"
+    },
+    "scripts": {
+        "auto-scripts": {
+            "cache:clear": "symfony-cmd",
+            "assets:install %PUBLIC_DIR%": "symfony-cmd"
+        },
+        "post-install-cmd": [
+            "@auto-scripts"
+        ],
+        "post-update-cmd": [
+            "@auto-scripts"
+        ],
+        "schema:validate": "symfony console doctrine:schema:validate --skip-sync",
+        "security:check": "symfony security:check",
+        "twig:lint": "symfony console lint:twig templates/ --ansi",
+        "yaml:lint": "symfony console lint:yaml config/ --ansi",
+        "type:check": "symfony php vendor/vimeo/psalm/psalm",
+        "type:fix": "symfony php vendor/vimeo/psalm/psalter --issues=all src",
+        "cs:check": "symfony php vendor/friendsofphp/php-cs-fixer/php-cs-fixer fix --dry-run --ansi",
+        "cs:fix": "symfony php vendor/friendsofphp/php-cs-fixer/php-cs-fixer fix --ansi",
+        "test": "symfony php bin/phpunit",
+        "check": [
+            "@schema:validate",
+            "@security:check",
+            "@twig:lint",
+            "@yaml:lint",
+            "@type:check",
+            "@cs:check",
+            "@test"
+        ],
+        "up": [
+            "docker-compose up -d",
+            "symfony server:start -d",
+            "symfony console cache:clear"
+        ],
+        "down": [
+            "symfony server:stop",
+            "docker-compose down"
+        ]
+    },
+    "conflict": {
+        "symfony/symfony": "*"
+    },
+    "extra": {
+        "symfony": {
+            "allow-contrib": true,
+            "require": "^5.1"
+        }
+    }
+}

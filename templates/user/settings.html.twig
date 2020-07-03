@@ -1,0 +1,60 @@
+{% extends 'layout/wide_form.html.twig' %}
+
+{% block title %}Setting - {{ site_name }}{% endblock %}
+
+{% block header %}Settings {% endblock %}
+
+{% block form %}
+    {{ form_start(form, {'attr': {'class': 'uk-form-stacked'}}) }}
+    {% for error in errors %}
+        <div class="uk-alert-danger" uk-alert>
+            <a class="uk-alert-close" uk-close></a>
+            {{ error.getMessageTemplate()|trans(error.getMessageParameters(), 'validation') }}
+        </div>
+    {% else %}
+        {% if success %}
+            <div class="uk-alert-success" uk-alert>
+                <a class="uk-alert-close" uk-close></a>
+                Your account settings have been updated.
+            </div>
+        {% endif %}
+    {% endfor %}
+    <fieldset class="uk-fieldset">
+        <legend class="uk-legend">Account</legend>
+        <div class="uk-margin">
+            <div class="uk-inline" style="display: block;">
+                <span class="uk-form-icon" uk-icon="icon: mail"></span>
+                {{ form_widget(form.email, {'attr': {'class': 'uk-input', 'placeholder': 'email'}}) }}
+            </div>
+        </div>
+
+        <hr class="uk-margin-medium-top uk-margin-medium-bottom"/>
+
+        <legend class="uk-legend">Security</legend>
+        <div class="uk-margin">
+            <div class="uk-form-controls">
+                <label for="password-reset-feature">Enable password reset feature</label>
+                {{ form_widget(form.password_reset_enabled, {'attr': {'class': 'uk-checkbox uk-float-right', 'id': 'password-reset-feature', 'checked': user.passwordResetEnabled}}) }}
+                <br/>
+                <small>
+                    It's important to always keep in mind that the ability to recover access to your
+                    account when
+                    you forget a password is a backdoor created as a trade-off between security and
+                    convenience.
+                </small>
+            </div>
+        </div>
+    </fieldset>
+
+    <div class="uk-margin">
+        <input class="uk-button uk-button-large uk-button-default uk-width-1-1" type="submit"
+               value="Save"/>
+    </div>
+
+    <div class="uk-margin uk-margin-remove-bottom">
+        <a href="{{ path('user_delete') }}" class="uk-button uk-button-large uk-button-default uk-text-danger uk-width-1-1">Delete my account</a>
+    </div>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block _bottom %}{% endblock %}

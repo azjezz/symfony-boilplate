@@ -1,0 +1,43 @@
+{% extends 'layout/form.html.twig' %}
+
+{% block title %}Register - {{ site_name }}{% endblock %}
+
+{% block header %}Register{% endblock %}
+
+{% block form %}
+    {{ form_start(form, {'attr': {'class': 'uk-form-stacked'}}) }}
+    <fieldset class="uk-fieldset uk-padding-remove-top">
+        {% for error in errors %}
+            <div class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a>{{ error.getMessageTemplate()|trans(error.getMessageParameters(), 'validation') }}</div>
+        {% endfor %}
+        <div class="uk-margin uk-margin-remove-top">
+            <div class="uk-inline uk-width-1-1">
+                <span class="uk-form-icon" uk-icon="icon: user"></span>
+                {{ form_widget(form.username, {'attr': {'class': 'uk-input', 'placeholder': 'username'}}) }}
+            </div>
+        </div>
+        <div class="uk-margin uk-margin-remove-top">
+            <div class="uk-inline uk-width-1-1">
+                <span class="uk-form-icon" uk-icon="icon: mail"></span>
+                {{ form_widget(form.email, {'attr': {'class': 'uk-input', 'placeholder': 'email'}}) }}
+            </div>
+        </div>
+        <div class="uk-margin">
+            <div class="uk-inline uk-width-1-1">
+                <span class="uk-form-icon" uk-icon="icon: lock"></span>
+                {{ form_widget(form.plainPassword, {'attr': {'class': 'uk-input', 'placeholder': 'password'}}) }}
+            </div>
+        </div>
+        <div class="uk-margin uk-margin-remove-bottom">
+            <input class="uk-button uk-button-large uk-button-default uk-width-1-1" type="submit" value="Register"/>
+        </div>
+    </fieldset>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block bottom %}
+    <small class="uk-text-muted">By clicking 'register', you agree to our <a target="_blank" href="{{ path('terms_of_service') }}">Terms of service</a> and <a target="_blank" href="{{ path('privacy_policy') }}">Privacy Policy</a>
+        .</small>
+{% endblock %}
+
+

@@ -1,0 +1,19 @@
+{% extends 'layout/basic.html.twig' %}
+
+{% block container %}
+    <div class="uk-flex uk-align-center uk-flex-column uk-width-2-3@m">
+        <div class="uk-card uk-card-default uk-margin-bottom">
+            <div class="uk-card-header">
+                <div class="uk-width-expand">
+                    <h3 class="uk-card-title uk-margin-remove-bottom">{% block header %}{% endblock %}</h3>
+                    {% block sub %}{% endblock %}
+                </div>
+            </div>
+            <div class="uk-card-body">
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+
+        {% block bottom %}{% endblock %}
+    </div>
+{% endblock %}

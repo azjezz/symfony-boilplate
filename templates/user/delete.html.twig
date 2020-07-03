@@ -1,0 +1,32 @@
+{% extends 'layout/form.html.twig' %}
+
+{% block title %}Delete My Account - {{ site_name }}{% endblock %}
+
+{% block header %}Delete My Account{% endblock %}
+
+{% block form %}
+    {{ form_start(form, {'attr': {'class': 'uk-form-stacked'}}) }}
+    <fieldset class="uk-fieldset uk-padding-remove-top">
+        {% for error in errors %}
+            <div class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a>{{ error.getMessageTemplate()|trans(error.getMessageParameters(), 'validation') }}</div>
+        {% endfor %}
+        <div class="uk-margin">
+            <p>If you do not think you will use {{ site_name }} again and would like your account deleted, we can take care of this for you.</p>
+            <p>Keep in mind that you will not be able to reactive your account or retrieve any of the information  you added.</p>
+        </div>
+        <div class="uk-margin">
+            <div class="uk-inline uk-width-1-1">
+                <span class="uk-form-icon" uk-icon="icon: lock"></span>
+                {{ form_widget(form.plain_password, {'attr': {'class': 'uk-input', 'placeholder': 'password'}}) }}
+            </div>
+        </div>
+        <div class="uk-margin uk-margin-remove-bottom">
+            <input class="uk-button uk-button-large uk-button-default uk-width-1-1" type="submit" value="Delete"/>
+        </div>
+    </fieldset>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block _bottom %}{% endblock %}
+
+
