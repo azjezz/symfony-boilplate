@@ -25,6 +25,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use SymfonyCasts\Bundle\ResetPassword\Exception\InvalidResetPasswordTokenException;
 use SymfonyCasts\Bundle\ResetPassword\Exception\ResetPasswordExceptionInterface;
 use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
 
@@ -104,12 +105,25 @@ final class PasswordReset
     public function getTokenFromSession(SessionInterface $session): string
     {
         $token = $session->get(self::ResetPasswordPublicTokenId);
-
         if (null === $token) {
             throw new NotFoundHttpException('No reset password token found in the URL or in the session.');
         }
 
         return $token;
+    }
+
+    /**
+     * @throws ResetPasswordExceptionInterface
+     */
+    public function retrieveUser(string $token): User
+    {
+        /** @var User $user */
+        $user = $this->helper->validateTokenAndFetchUser($token);
+        if (!$user->isPasswordResetEnabled()) {
+            throw new InvalidResetPasswordTokenException();
+        }
+
+        return $user;
     }
 
     public function resetPassword(Request $request, FormInterface $form, User $user, string $token): void

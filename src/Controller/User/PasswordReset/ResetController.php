@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace App\Controller\User\PasswordReset;
 
-use App\Entity\User;
 use App\Form\User\PasswordReset\PasswordResetType;
 use App\Security\Security;
 use App\Service\PasswordReset;
@@ -65,8 +64,7 @@ final class ResetController
         $token = $this->passwordReset->getTokenFromSession($request->getSession());
 
         try {
-            /** @var User $user */
-            $user = $this->passwordReset->helper->validateTokenAndFetchUser($token);
+            $user = $this->passwordReset->retrieveUser($token);
         } catch (ResetPasswordExceptionInterface $e) {
             /** @var FlashBagInterface $flashes */
             $flashes = $request->getSession()->getBag('flashes');
