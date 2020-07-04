@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use Psl;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Psl;
 use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordRequestInterface;
 use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordRequestTrait;
 
@@ -44,7 +44,7 @@ class ResetPasswordRequest implements ResetPasswordRequestInterface
     public function getUser(): object
     {
         $user = $this->user;
-        Psl\invariant($user !== null, 'reset password request has not been initialized yet.');
+        Psl\invariant(null !== $user, 'reset password request has not been initialized yet.');
 
         /** @var User $user */
         return $user;

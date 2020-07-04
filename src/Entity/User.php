@@ -184,8 +184,6 @@ class User implements UserInterface
 
     /**
      * @param string[] $roles
-     *
-     * @return self
      */
     public function setRoles(array $roles): self
     {
@@ -342,11 +340,13 @@ class User implements UserInterface
     {
         /** @var Collection<int, Suspension>|null $suspensions */
         $suspensions = $this->getSuspensions();
+
         if (null === $suspensions) {
             return false;
         }
 
         $suspension = $suspensions->last();
+
         if (!$suspension) {
             return false;
         }
@@ -365,6 +365,7 @@ class User implements UserInterface
     public function addSuspension(Suspension $suspension): self
     {
         Psl\invariant(!$this->isSuspended(), 'Unable to suspend an already suspended user.');
+
         if (null !== $this->suspensions && !$this->suspensions->contains($suspension)) {
             $this->suspensions[] = $suspension;
             $suspension->setUser($this);

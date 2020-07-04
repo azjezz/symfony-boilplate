@@ -45,9 +45,6 @@ final class UnsuspendCommand extends Command
             ->addArgument('username', InputArgument::REQUIRED, 'Unique username of the user you wish to unsuspend.');
     }
 
-    /**
-     * @return int
-     */
     public function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);

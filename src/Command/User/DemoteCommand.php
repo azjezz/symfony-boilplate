@@ -39,9 +39,6 @@ final class DemoteCommand extends Command
             ->addArgument('username', InputArgument::REQUIRED, 'Unique username of the admin/moderator you wish to demote.');
     }
 
-    /**
-     * @return int
-     */
     public function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);

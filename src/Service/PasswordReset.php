@@ -106,6 +106,7 @@ final class PasswordReset
     {
         /** @var string|null $token */
         $token = $session->get(self::ResetPasswordPublicTokenId);
+
         if (null === $token) {
             throw new NotFoundHttpException('No reset password token found in the URL or in the session.');
         }
