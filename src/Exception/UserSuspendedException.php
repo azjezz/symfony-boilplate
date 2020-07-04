@@ -15,6 +15,7 @@ namespace App\Exception;
 
 use App\Entity\Suspension;
 use App\Entity\User;
+use DateTimeInterface;
 use Psl\Str;
 use Symfony\Component\Security\Core\Exception\AccountStatusException;
 
@@ -24,16 +25,26 @@ final class UserSuspendedException extends AccountStatusException
 
     private Suspension $suspension;
 
+    /**
+     * @return array{0: Suspension, 1: array<array-key, mixed>}
+     */
     public function __serialize(): array
     {
-        return [$this->suspension, parent::__serialize()];
+        /** @var array<array-key, mixed> $data */
+        $data = parent::__serialize();
+
+        return [$this->suspension, $data];
     }
 
     public function __unserialize(array $data): void
     {
-        [$this->suspension, $data] = $data;
+        /**
+         * @var array{0: Suspension, 1: array<array-key, mixed>} $data
+         * @var array<array-key, mixed> $parent
+         */
+        [$this->suspension, $parent] = $data;
 
-        parent::__unserialize($data);
+        parent::__unserialize($parent);
     }
 
     public static function create(User $user, Suspension $suspension): UserSuspendedException
@@ -43,11 +54,6 @@ final class UserSuspendedException extends AccountStatusException
         $self->suspension = $suspension;
 
         return $self;
-    }
-
-    public function getSuspension(): Suspension
-    {
-        return $this->suspension;
     }
 
     /**
@@ -63,9 +69,13 @@ final class UserSuspendedException extends AccountStatusException
      */
     public function getMessageData(): array
     {
+        $reason = $this->suspension->getReason();
+        /** @var DateTimeInterface $date */
+        $date = $this->suspension->getSuspendedUntil();
+
         return [
-            'suspension_reason' => $this->suspension->getReason(),
-            'suspended_until' => $this->suspension->getSuspendedUntil()->format('Y-m-d H:i:s'),
+            'suspension_reason' => $reason,
+            'suspended_until' => $date->format('Y-m-d H:i:s'),
         ];
     }
 }

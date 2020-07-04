@@ -81,7 +81,7 @@ class User implements UserInterface
      *
      * @var string[]
      */
-    private iterable $roles = [];
+    private array $roles = [];
 
     /**
      * @ORM\Column(type="string")
@@ -133,6 +133,9 @@ class User implements UserInterface
         return $this->username ?? $this->email ?? '(unknown)';
     }
 
+    /**
+     * @return array{id: int|null, username: null|string, email: null|string, password: null|string, roles: array<array-key, string>, password_reset_enabled: bool}
+     */
     public function __serialize(): array
     {
         return [
@@ -147,6 +150,7 @@ class User implements UserInterface
 
     public function __unserialize(array $data): void
     {
+        /** @var array{id: int|null, username: null|string, email: null|string, password: null|string, roles: array<array-key, string>, password_reset_enabled: bool} $data */
         $this->id = $data['id'];
         $this->username = $data['username'];
         $this->email = $data['email'];
@@ -180,8 +184,10 @@ class User implements UserInterface
 
     /**
      * @param string[] $roles
+     *
+     * @return self
      */
-    public function setRoles(array $roles): User
+    public function setRoles(array $roles): self
     {
         /** @var string[] $mapped */
         $mapped = Iter\map(
@@ -189,7 +195,9 @@ class User implements UserInterface
             fn (string $role): string => Str\uppercase($role)
         );
 
-        $this->roles = Arr\values(Arr\unique($mapped));
+        /** @var array<int, string> $roles */
+        $roles = Arr\values(Arr\unique($mapped));
+        $this->roles = $roles;
 
         return $this;
     }
@@ -199,7 +207,7 @@ class User implements UserInterface
         return Arr\contains($this->getRoles(), $role);
     }
 
-    public function addRole(string $role): User
+    public function addRole(string $role): self
     {
         if ($this->hasRole($role)) {
             return $this;
@@ -220,7 +228,7 @@ class User implements UserInterface
         return $this->password;
     }
 
-    public function setPassword(string $password): User
+    public function setPassword(string $password): self
     {
         $this->password = $password;
 
@@ -261,21 +269,21 @@ class User implements UserInterface
         return $this->email;
     }
 
-    public function setUsername(?string $username): User
+    public function setUsername(?string $username): self
     {
         $this->username = $username;
 
         return $this;
     }
 
-    public function setEmail(?string $email): User
+    public function setEmail(?string $email): self
     {
         $this->email = $email;
 
         return $this;
     }
 
-    public function setPlainPassword(?string $plainPassword): User
+    public function setPlainPassword(?string $plainPassword): self
     {
         $this->plainPassword = $plainPassword;
 
@@ -287,7 +295,7 @@ class User implements UserInterface
         return $this->passwordResetEnabled;
     }
 
-    public function setPasswordResetEnabled(bool $passwordResetEnabled): User
+    public function setPasswordResetEnabled(bool $passwordResetEnabled): self
     {
         $this->passwordResetEnabled = $passwordResetEnabled;
 
@@ -332,9 +340,13 @@ class User implements UserInterface
 
     public function isSuspended(): bool
     {
-        /** @var Suspension|false $suspension */
-        $suspension = $this->getSuspensions()->last();
+        /** @var Collection<int, Suspension>|null $suspensions */
+        $suspensions = $this->getSuspensions();
+        if (null === $suspensions) {
+            return false;
+        }
 
+        $suspension = $suspensions->last();
         if (!$suspension) {
             return false;
         }
@@ -343,9 +355,9 @@ class User implements UserInterface
     }
 
     /**
-     * @return Collection<int, Suspension>
+     * @return Collection<int, Suspension>|null
      */
-    public function getSuspensions(): Collection
+    public function getSuspensions(): ?Collection
     {
         return $this->suspensions;
     }
@@ -353,8 +365,7 @@ class User implements UserInterface
     public function addSuspension(Suspension $suspension): self
     {
         Psl\invariant(!$this->isSuspended(), 'Unable to suspend an already suspended user.');
-
-        if (!$this->suspensions->contains($suspension)) {
+        if (null !== $this->suspensions && !$this->suspensions->contains($suspension)) {
             $this->suspensions[] = $suspension;
             $suspension->setUser($this);
         }
@@ -364,7 +375,7 @@ class User implements UserInterface
 
     public function removeSuspension(Suspension $suspension): self
     {
-        if ($this->suspensions->contains($suspension)) {
+        if (null !== $this->suspensions && $this->suspensions->contains($suspension)) {
             $this->suspensions->removeElement($suspension);
             // set the owning side to null (unless already changed)
             if ($suspension->getUser() === $this) {

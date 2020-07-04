@@ -15,6 +15,7 @@ namespace App\Mail;
 
 use App\Entity\User;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\Mime\Address;
 
 final class PasswordResetEmail extends TemplatedEmail
 {
@@ -24,10 +25,13 @@ final class PasswordResetEmail extends TemplatedEmail
 
     public static function create(User $receiver, array $context = []): PasswordResetEmail
     {
-        $email = new self();
+        /** @var string $receiverEmail */
+        $receiverEmail = $receiver->getEmail();
+        $receiverName = $receiver->getUsername();
 
+        $email = new self();
         $email
-            ->to($receiver->getEmail())
+            ->to(new Address($receiverEmail, $receiverName))
             ->subject(self::Subject)
             ->htmlTemplate(self::Template)
             ->context($context);

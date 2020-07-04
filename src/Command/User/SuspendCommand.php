@@ -17,6 +17,8 @@ use App\Entity\Suspension;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use DateTimeImmutable;
+use DateTimeInterface;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
 use Psl;
 use Psl\Str;
@@ -46,6 +48,9 @@ final class SuspendCommand extends Command
             ->addArgument('username', InputArgument::REQUIRED, 'Unique username of the user you wish to suspend.');
     }
 
+    /**
+     * @return int
+     */
     public function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
@@ -61,19 +66,27 @@ final class SuspendCommand extends Command
         }
 
         if ($user->isSuspended()) {
+            /** @var Collection<int, Suspension> $suspensions */
+            $suspensions = $user->getSuspensions();
             /** @var Suspension $suspension */
-            $suspension = $user->getSuspensions()->last();
-            $io->warning(Str\format('"%s" is already suspended for %s until %s.', $username, $suspension->getReason(), $suspension->getSuspendedUntil()->format('Y-m-d H:i:s')));
+            $suspension = $suspensions->last();
+            /** @var string $reason */
+            $reason = $suspension->getReason();
+            /** @var DateTimeInterface $date */
+            $date = $suspension->getSuspendedUntil();
+            $io->warning(Str\format('"%s" is already suspended for %s until %s.', $username, $reason, $date->format('Y-m-d H:i:s')));
 
             return 1;
         }
 
-        $reason = $io->ask('What is the reason for this suspension', null, static function (?string $answer): string {
+        /** @var string $reason */
+        $reason = $io->ask('What is the reason for this suspension', null, static function (?string $answer): ?string {
             Psl\invariant(null !== $answer && !Str\is_empty($answer), 'You must specify a reason for the suspension.');
 
             return $answer;
         });
 
+        /** @var string $until */
         $until = $io->ask('When should the suspension end', null, static function (?string $date): ?string {
             if (null === $date) {
                 return null;

@@ -16,6 +16,7 @@ namespace App\Security;
 use App\Entity\Suspension;
 use App\Entity\User;
 use App\Exception\UserSuspendedException;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Security\Core\User\UserCheckerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -31,8 +32,10 @@ final class UserChecker implements UserCheckerInterface
         }
 
         if ($user->isSuspended()) {
-            /** @var Suspension */
-            $suspension = $user->getSuspensions()->last();
+            /** @var Collection<int, Suspension> $suspensions */
+            $suspensions = $user->getSuspensions();
+            /** @var Suspension $suspension */
+            $suspension = $suspensions->last();
 
             throw UserSuspendedException::create($user, $suspension);
         }

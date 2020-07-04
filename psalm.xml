@@ -4,7 +4,6 @@
         strictBinaryOperands="true"
         allowPhpStormGenerics="true"
         resolveFromConfigFile="true"
-        errorLevel="8"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns="https://getpsalm.org/schema/config"
         xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
@@ -37,18 +36,18 @@
                 <directory name="src/Entity"/>
                 <directory name="src/Controller"/>
                 <directory name="src/Command"/>
-                <!-- Tests have lots of unused publics - all the test methods-->
+                <!-- Tests have lots of unused public methods - all the test methods-->
                 <directory name="tests/"/>
                 <referencedMethod name="*::__construct"/>
             </errorLevel>
         </PossiblyUnusedMethod>
 
-        <DeprecatedInterface errorLevel="suppress">
+        <PropertyNotSetInConstructor>
             <errorLevel type="suppress">
-                <!-- Doctrine ORM using deprecated Doctrine interfaces -->
-                <directory name="src/Repository"/>
+                <!-- Late initialization for doctrine fixture reference repository -->
+                <directory name="src/Fixtures"/>
             </errorLevel>
-        </DeprecatedInterface>
+        </PropertyNotSetInConstructor>
 
         <MissingConstructor errorLevel="suppress">
             <errorLevel type="suppress">

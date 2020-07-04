@@ -79,7 +79,7 @@ class Suspension
         return $this->suspendedUntil;
     }
 
-    public function setSuspendedUntil(?DateTimeInterface $suspendedUntil): Suspension
+    public function setSuspendedUntil(?DateTimeInterface $suspendedUntil): self
     {
         $this->suspendedUntil = $suspendedUntil;
 
@@ -91,7 +91,7 @@ class Suspension
         return $this->reason;
     }
 
-    public function setReason(?string $reason): Suspension
+    public function setReason(?string $reason): self
     {
         $this->reason = $reason;
 

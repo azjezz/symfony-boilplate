@@ -16,6 +16,7 @@ namespace App\Command\User;
 use App\Entity\Suspension;
 use App\Repository\UserRepository;
 use DateTimeImmutable;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
 use Psl\Str;
 use Symfony\Component\Console\Command\Command;
@@ -44,6 +45,9 @@ final class UnsuspendCommand extends Command
             ->addArgument('username', InputArgument::REQUIRED, 'Unique username of the user you wish to unsuspend.');
     }
 
+    /**
+     * @return int
+     */
     public function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
@@ -58,8 +62,10 @@ final class UnsuspendCommand extends Command
             return 1;
         }
 
+        /** @var Collection<int, Suspension> $suspensions */
+        $suspensions = $user->getSuspensions();
         /** @var Suspension $suspension */
-        $suspension = $user->getSuspensions()->last();
+        $suspension = $suspensions->last();
         $suspension->setSuspendedUntil(new DateTimeImmutable('now'));
 
         $this->em->flush();

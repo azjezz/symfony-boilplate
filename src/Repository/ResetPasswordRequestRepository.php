@@ -43,10 +43,9 @@ final class ResetPasswordRequestRepository extends ServiceEntityRepository imple
         DateTimeInterface $expiresAt,
         string $selector,
         string $hashedToken
-    ): ResetPasswordRequestInterface {
-        /** @var User $user */
+    ): ResetPasswordRequest {
         Psl\invariant($user instanceof User, 'Invalid user entity.');
-
+        /** @var User $user */
         return new ResetPasswordRequest($user, $expiresAt, $selector, $hashedToken);
     }
 }

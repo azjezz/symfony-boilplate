@@ -18,8 +18,10 @@ use App\Service\PasswordReset;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
 use Twig\Environment;
+use Twig\Error\Error as TwigError;
 
 /**
  * @Route("/user/password-reset")
@@ -41,14 +43,16 @@ final class RequestController
 
     /**
      * @Route("/", methods={"GET", "POST"}, name="user_password_reset_request")
+     *
+     * @throws TwigError
      */
-    public function request(Request $request): Response
+    public function request(Request $request, Session $session): Response
     {
         $form = $this->form->create(PasswordResetRequestType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $session = $request->getSession();
+            /** @var string $address */
             $address = $form->get(PasswordResetRequestType::EmailField)->getData();
 
             return $this->passwordReset->sendPasswordResetEmail($session, $address);

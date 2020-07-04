@@ -41,6 +41,9 @@ final class PromoteCommand extends Command
             ->addOption('admin', null, InputOption::VALUE_NONE, 'If this option is specified, the user will be promoted to admin role.');
     }
 
+    /**
+     * @return int
+     */
     public function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);

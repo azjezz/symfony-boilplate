@@ -20,7 +20,7 @@ use App\Repository\UserRepository;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -54,7 +54,7 @@ final class PasswordReset
         $this->encoder = $encoder;
     }
 
-    public function sendPasswordResetEmail(SessionInterface $session, string $address): RedirectResponse
+    public function sendPasswordResetEmail(Session $session, string $address): RedirectResponse
     {
         $user = $this->repository->findOneBy([
             'email' => $address,
@@ -71,7 +71,7 @@ final class PasswordReset
         try {
             $resetToken = $this->helper->generateResetToken($user);
         } catch (ResetPasswordExceptionInterface $e) {
-            $session->getBag('flashes')->add('reset_password_error', $e->getReason());
+            $session->getFlashBag()->add('reset_password_error', $e->getReason());
 
             return new RedirectResponse($this->urlGenerator->generate('user_password_reset_request'));
         }
@@ -91,7 +91,7 @@ final class PasswordReset
         return $session->has(self::ResetPasswordCheckEmailId);
     }
 
-    public function storeTokenInSession(SessionInterface $session, string $token): Response
+    public function storeTokenInSession(SessionInterface $session, string $token): RedirectResponse
     {
         // We store the token in session and remove it from the URL, to avoid the URL being
         // loaded in a browser and potentially leaking the token to 3rd party JavaScript.
@@ -104,8 +104,8 @@ final class PasswordReset
 
     public function getTokenFromSession(SessionInterface $session): string
     {
+        /** @var string|null $token */
         $token = $session->get(self::ResetPasswordPublicTokenId);
-
         if (null === $token) {
             throw new NotFoundHttpException('No reset password token found in the URL or in the session.');
         }
@@ -130,6 +130,7 @@ final class PasswordReset
 
     public function resetPassword(Request $request, FormInterface $form, User $user, string $token): void
     {
+        /** @var string $password */
         $password = $form->get(PasswordResetType::PasswordField)->getData();
 
         // A password reset token should be used only once, remove it.
