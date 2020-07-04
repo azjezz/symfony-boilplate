@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 
 $header = <<<HEADER
-This file is part of Sanyu.
+This file is part of Symfony Boilerplate.
 
 (c) Saif Eddin Gmati
 

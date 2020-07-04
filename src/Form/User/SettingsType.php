@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of Sanyu.
+ * This file is part of Symfony Boilerplate.
  *
  * (c) Saif Eddin Gmati
  *
