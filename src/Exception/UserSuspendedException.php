@@ -39,7 +39,7 @@ final class UserSuspendedException extends AccountStatusException
     public function __unserialize(array $data): void
     {
         /**
-         * @var array{0: Suspension, 1: array<array-key, mixed>} $data
+         * @var array{0:         Suspension, 1: array<array-key, mixed>} $data
          * @var array<array-key, mixed> $parent
          */
         [$this->suspension, $parent] = $data;
