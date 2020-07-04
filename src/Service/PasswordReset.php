@@ -105,6 +105,7 @@ final class PasswordReset
     public function getTokenFromSession(SessionInterface $session): string
     {
         $token = $session->get(self::ResetPasswordPublicTokenId);
+
         if (null === $token) {
             throw new NotFoundHttpException('No reset password token found in the URL or in the session.');
         }
@@ -119,6 +120,7 @@ final class PasswordReset
     {
         /** @var User $user */
         $user = $this->helper->validateTokenAndFetchUser($token);
+
         if (!$user->isPasswordResetEnabled()) {
             throw new InvalidResetPasswordTokenException();
         }
