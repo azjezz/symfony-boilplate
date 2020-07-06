@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "73a08dab3d6cdadcc709a277266ee520",
+    "content-hash": "64051fd1d68d415afccf65705cfa7295",
     "packages": [
         {
             "name": "azjezz/psl",
-            "version": "dev-master",
+            "version": "dev-develop",
             "source": {
                 "type": "git",
                 "url": "https://github.com/azjezz/psl.git",
-                "reference": "b0dadc165b7adf792d4e786b44789bbc83a80939"
+                "reference": "7bf9aefe175e0b1869eae0b748babe4e19a4b53d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/azjezz/psl/zipball/b0dadc165b7adf792d4e786b44789bbc83a80939",
-                "reference": "b0dadc165b7adf792d4e786b44789bbc83a80939",
+                "url": "https://api.github.com/repos/azjezz/psl/zipball/7bf9aefe175e0b1869eae0b748babe4e19a4b53d",
+                "reference": "7bf9aefe175e0b1869eae0b748babe4e19a4b53d",
                 "shasum": ""
             },
             "require": {
@@ -51,7 +51,7 @@
                 }
             ],
             "description": "PHP Standard Library",
-            "time": "2020-03-01T21:07:51+00:00"
+            "time": "2020-07-06T18:35:34+00:00"
         },
         {
             "name": "doctrine/annotations",
