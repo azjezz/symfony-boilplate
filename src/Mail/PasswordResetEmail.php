@@ -19,9 +19,9 @@ use Symfony\Component\Mime\Address;
 
 final class PasswordResetEmail extends TemplatedEmail
 {
-    private const Subject = 'Password Reset';
+    private const SUBJECT = 'Password Reset';
 
-    private const Template = 'user/reset_password/email.html.twig';
+    private const TEMPLATE = 'user/reset_password/email.html.twig';
 
     public static function create(User $receiver, array $context = []): PasswordResetEmail
     {
@@ -32,8 +32,8 @@ final class PasswordResetEmail extends TemplatedEmail
         $email = new self();
         $email
             ->to(new Address($receiverEmail, $receiverName))
-            ->subject(self::Subject)
-            ->htmlTemplate(self::Template)
+            ->subject(self::SUBJECT)
+            ->htmlTemplate(self::TEMPLATE)
             ->context($context);
 
         return $email;

@@ -1,7 +1,10 @@
 <nav class="uk-navbar-container uk-navbar-transparent uk-padding uk-padding-remove-vertical" uk-navbar>
     <div class="uk-navbar-left">
         <ul class="uk-navbar-nav">
-            <li class="uk-active"><a href="{{ path('index') }}">{{ site_name }}</a></li>
+            <li class="uk-active" style="display: flex">
+                <img src="{{ asset('build/images/' ~ site_logo) }}" width="150" height="150">
+                <a href="{{ path('index') }}">{{ site_name }}</a>
+            </li>
         </ul>
     </div>
     <div class="uk-navbar-right">

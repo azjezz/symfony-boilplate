@@ -34,11 +34,11 @@ final class Authenticator extends AbstractFormLoginAuthenticator implements Pass
 {
     use TargetPathTrait;
 
-    public const LoginRoute = 'user_login';
+    public const LOGIN_ROUTE = 'user_login';
 
-    public const LogoutRoute = 'user_logout';
+    public const LOGOUT_ROUTE = 'user_logout';
 
-    public const CsrfTokenId = 'authenticate';
+    public const CSRF_TOKEN_ID = 'authenticate';
 
     private UrlGeneratorInterface $urlGenerator;
 
@@ -58,7 +58,7 @@ final class Authenticator extends AbstractFormLoginAuthenticator implements Pass
 
     public function supports(Request $request): bool
     {
-        return self::LoginRoute === $request->attributes->get('_route')
+        return self::LOGIN_ROUTE === $request->attributes->get('_route')
             && $request->isMethod('POST');
     }
 
@@ -84,7 +84,7 @@ final class Authenticator extends AbstractFormLoginAuthenticator implements Pass
         }
 
         $request->getSession()->set(
-            Security::LastUsername,
+            Security::LAST_USERNAME,
             $credentials['username']
         );
 
@@ -94,7 +94,7 @@ final class Authenticator extends AbstractFormLoginAuthenticator implements Pass
     public function getUser($credentials, UserProviderInterface $userProvider): User
     {
         /** @var array{username: string, password: string, csrf_token: string} $credentials */
-        $token = new CsrfToken(self::CsrfTokenId, $credentials['csrf_token']);
+        $token = new CsrfToken(self::CSRF_TOKEN_ID, $credentials['csrf_token']);
 
         if (!$this->csrfTokenManager->isTokenValid($token)) {
             throw new InvalidCsrfTokenException('Invalid CSRF token.');
@@ -136,6 +136,6 @@ final class Authenticator extends AbstractFormLoginAuthenticator implements Pass
 
     protected function getLoginUrl(): string
     {
-        return $this->urlGenerator->generate(self::LoginRoute);
+        return $this->urlGenerator->generate(self::LOGIN_ROUTE);
     }
 }

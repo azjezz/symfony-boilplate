@@ -53,7 +53,7 @@ final class RequestController
 
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var string $address */
-            $address = $form->get(PasswordResetRequestType::EmailField)->getData();
+            $address = $form->get(PasswordResetRequestType::EMAIL_FIELD)->getData();
 
             return $this->passwordReset->sendPasswordResetEmail($session, $address);
         }

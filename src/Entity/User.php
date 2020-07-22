@@ -176,7 +176,7 @@ class User implements UserInterface
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-        $roles[] = self::RoleUser;
+        $roles[] = self::ROLE_USER;
 
         /** @var string[] */
         return Arr\unique($roles);

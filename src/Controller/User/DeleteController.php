@@ -55,9 +55,9 @@ final class DeleteController
      */
     public function delete(Request $request): Response
     {
-        if (!$this->security->isGranted('ROLE_USER')) {
+        if (!$this->security->isGranted(User::ROLE_USER)) {
             $exception = new AccessDeniedException('Access Denied.');
-            $exception->setAttributes(['ROLE_USER']);
+            $exception->setAttributes([User::ROLE_USER]);
 
             throw $exception;
         }

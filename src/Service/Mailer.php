@@ -23,7 +23,7 @@ use Symfony\Component\Mime\Email;
 
 final class Mailer
 {
-    private const Address = 'Hello <hello@example.com>';
+    private const ADDRESS = 'Hello <hello@example.com>';
 
     private MailerInterface $mailer;
 
@@ -38,15 +38,15 @@ final class Mailer
     public function send(Email $email, ?Envelope $envelope = null): void
     {
         try {
-            $email->from(Address::fromString(self::Address));
+            $email->from(Address::fromString(self::ADDRESS));
 
             $this->mailer->send($email, $envelope);
-        } catch (ExceptionInterface $e) {
-            $this->logger->error(Str\format('Error while attempting to send an email: %s', $e->getMessage()), [
-                'exception' => $e,
+        } catch (ExceptionInterface $exception) {
+            $this->logger->error(Str\format('Error while attempting to send an email: %s', $exception->getMessage()), [
+                'exception' => $exception,
             ]);
 
-            throw $e;
+            throw $exception;
         }
     }
 }

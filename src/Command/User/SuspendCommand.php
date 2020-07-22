@@ -56,7 +56,7 @@ final class SuspendCommand extends Command
         $username = $input->getArgument('username');
         $user = $this->userRepository->loadUserByUsername($username);
 
-        if ($user->hasRole(User::RoleAdmin) || $user->hasRole(User::RoleModerator)) {
+        if ($user->hasRole(User::ROLE_ADMIN) || $user->hasRole(User::ROLE_MODERATOR)) {
             $io->error('If you wish to suspend an administrator or a moderator, you would need to demote the user of their role first.');
 
             return 1;

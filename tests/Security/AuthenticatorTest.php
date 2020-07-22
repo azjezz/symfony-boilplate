@@ -18,6 +18,7 @@ use App\Fixtures\UserFixture;
 use App\Security\Authenticator;
 use App\Security\Security;
 use App\Test\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -39,7 +40,7 @@ final class AuthenticatorTest extends TestCase
         $authenticator = self::$container->get(Authenticator::class);
 
         $request = Request::create('/', 'POST');
-        $request->attributes->set('_route', Authenticator::LoginRoute);
+        $request->attributes->set('_route', Authenticator::LOGIN_ROUTE);
 
         self::assertTrue($authenticator->supports($request));
 
@@ -47,7 +48,7 @@ final class AuthenticatorTest extends TestCase
 
         self::assertFalse($authenticator->supports($request));
 
-        $request->attributes->set('_route', Authenticator::LogoutRoute);
+        $request->attributes->set('_route', Authenticator::LOGOUT_ROUTE);
 
         self::assertFalse($authenticator->supports($request));
 
@@ -60,7 +61,7 @@ final class AuthenticatorTest extends TestCase
     {
         self::bootKernel();
 
-        /** @var Session&\PHPUnit\Framework\MockObject\MockObject $session */
+        /** @var Session&MockObject $session */
         $session = $this->createMock(Session::class);
         $request = Request::create('/user/login', 'POST');
         $request->setSession($session);
@@ -76,7 +77,7 @@ final class AuthenticatorTest extends TestCase
 
         $session->expects($this->once())
             ->method('set')
-            ->with(Security::LastUsername, 'azjezz');
+            ->with(Security::LAST_USERNAME, 'azjezz');
 
         $credentials = $authenticator->getCredentials($request);
 
@@ -103,7 +104,7 @@ final class AuthenticatorTest extends TestCase
         $authenticator = self::$container->get(Authenticator::class);
 
         $user = new User();
-        /** @var UserProviderInterface&\PHPUnit\Framework\MockObject\MockObject $userProvider */
+        /** @var UserProviderInterface&MockObject $userProvider */
         $userProvider = $this->createMock(UserProviderInterface::class);
         $userProvider->expects($this->once())->method('loadUserByUsername')
             ->with('azjezz')
@@ -114,7 +115,7 @@ final class AuthenticatorTest extends TestCase
 
         $authenticationUser = $authenticator->getUser([
             'username' => 'azjezz',
-            'csrf_token' => $csrfManager->getToken(Authenticator::CsrfTokenId)
+            'csrf_token' => $csrfManager->getToken(Authenticator::CSRF_TOKEN_ID)
                 ->getValue(),
         ], $userProvider);
 

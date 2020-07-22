@@ -31,9 +31,11 @@ use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
 
 final class PasswordReset
 {
-    public const ResetPasswordPublicTokenId = 'ResetPasswordPublicToken';
+    public const RESET_PASSWORD_PUBLIC_TOKEN_ID = 'ResetPasswordPublicToken';
 
-    public const ResetPasswordCheckEmailId = 'ResetPasswordCheckEmail';
+    public const RESET_PASSWORD_CHECK_EMAIL_ID = 'ResetPasswordCheckEmail';
+
+    public const RESET_PASSWORD_ERROR = 'reset_password_error';
 
     public ResetPasswordHelperInterface $helper;
 
@@ -60,7 +62,7 @@ final class PasswordReset
             'email' => $address,
         ]);
 
-        $session->set(self::ResetPasswordCheckEmailId, true);
+        $session->set(self::RESET_PASSWORD_CHECK_EMAIL_ID, true);
 
         if (null === $user || !$user->isPasswordResetEnabled()) {
             $url = $this->urlGenerator->generate('user_password_reset_confirm');
@@ -70,8 +72,8 @@ final class PasswordReset
 
         try {
             $resetToken = $this->helper->generateResetToken($user);
-        } catch (ResetPasswordExceptionInterface $e) {
-            $session->getFlashBag()->add('reset_password_error', $e->getReason());
+        } catch (ResetPasswordExceptionInterface $exception) {
+            $session->getFlashBag()->add(self::RESET_PASSWORD_ERROR, $exception->getReason());
 
             return new RedirectResponse($this->urlGenerator->generate('user_password_reset_request'));
         }
@@ -88,14 +90,14 @@ final class PasswordReset
 
     public function canCheckEmail(SessionInterface $session): bool
     {
-        return $session->has(self::ResetPasswordCheckEmailId);
+        return $session->has(self::RESET_PASSWORD_CHECK_EMAIL_ID);
     }
 
     public function storeTokenInSession(SessionInterface $session, string $token): RedirectResponse
     {
         // We store the token in session and remove it from the URL, to avoid the URL being
         // loaded in a browser and potentially leaking the token to 3rd party JavaScript.
-        $session->set(self::ResetPasswordPublicTokenId, $token);
+        $session->set(self::RESET_PASSWORD_PUBLIC_TOKEN_ID, $token);
 
         $url = $this->urlGenerator->generate('user_password_reset');
 
@@ -105,7 +107,7 @@ final class PasswordReset
     public function getTokenFromSession(SessionInterface $session): string
     {
         /** @var string|null $token */
-        $token = $session->get(self::ResetPasswordPublicTokenId);
+        $token = $session->get(self::RESET_PASSWORD_PUBLIC_TOKEN_ID);
 
         if (null === $token) {
             throw new NotFoundHttpException('No reset password token found in the URL or in the session.');
@@ -148,7 +150,7 @@ final class PasswordReset
 
     private function cleanSessionAfterReset(SessionInterface $session): void
     {
-        $session->remove(self::ResetPasswordPublicTokenId);
-        $session->remove(self::ResetPasswordCheckEmailId);
+        $session->remove(self::RESET_PASSWORD_PUBLIC_TOKEN_ID);
+        $session->remove(self::RESET_PASSWORD_CHECK_EMAIL_ID);
     }
 }

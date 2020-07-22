@@ -58,7 +58,7 @@ final class PromoteCommand extends Command
             return 1;
         }
 
-        $role = $admin ? User::RoleAdmin : User::RoleModerator;
+        $role = $admin ? User::ROLE_ADMIN : User::ROLE_MODERATOR;
 
         if ($user->hasRole($role)) {
             $io->warning(Str\format('User "%s" is already %s.', $username, $admin ? 'an admin' : 'a moderator'));

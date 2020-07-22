@@ -19,16 +19,16 @@ use Symfony\Component\Security\Core\User\UserInterface as SymfonyUser;
 
 interface UserInterface extends SymfonyUser, Stringable, EquatableInterface
 {
-    public const RoleUser = 'ROLE_USER';
+    public const ROLE_USER = 'ROLE_USER';
 
-    public const RoleModerator = 'ROLE_MOD';
+    public const ROLE_MODERATOR = 'ROLE_MOD';
 
-    public const RoleAdmin = 'ROLE_ADMIN';
+    public const ROLE_ADMIN = 'ROLE_ADMIN';
 
-    public const Roles = [
-        self::RoleUser,
-        self::RoleModerator,
-        self::RoleAdmin,
+    public const ROLES = [
+        self::ROLE_USER,
+        self::ROLE_MODERATOR,
+        self::ROLE_ADMIN,
     ];
 
     public function __serialize(): array;

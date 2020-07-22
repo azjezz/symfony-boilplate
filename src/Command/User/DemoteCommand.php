@@ -47,7 +47,7 @@ final class DemoteCommand extends Command
         $username = $input->getArgument('username');
         $user = $this->userRepository->loadUserByUsername($username);
 
-        $isAdmin = $user->hasRole(User::RoleAdmin);
+        $isAdmin = $user->hasRole(User::ROLE_ADMIN);
 
         if (
             $isAdmin &&
@@ -56,13 +56,13 @@ final class DemoteCommand extends Command
             return 1;
         }
 
-        if (!$isAdmin && !$user->hasRole(User::RoleModerator)) {
+        if (!$isAdmin && !$user->hasRole(User::ROLE_MODERATOR)) {
             $io->warning(Str\format('"%s" is already a regular user.', $username));
 
             return 1;
         }
 
-        $user->setRoles([User::RoleUser]);
+        $user->setRoles([User::ROLE_USER]);
         $this->userRepository->save($user);
 
         $io->success(Str\format('%s "%s" has been demoted to regular user.', $isAdmin ? 'admin' : 'moderator', $username));

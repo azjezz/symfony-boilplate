@@ -27,15 +27,15 @@ use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 
 final class Security implements AuthorizationCheckerInterface
 {
-    public const Firewall = 'main';
+    public const FIREWALL = 'main';
 
-    public const AccessDeniedError = SymfonySecurity::ACCESS_DENIED_ERROR;
+    public const ACCESS_DENIED_ERROR = SymfonySecurity::ACCESS_DENIED_ERROR;
 
-    public const AuthenticationError = SymfonySecurity::AUTHENTICATION_ERROR;
+    public const AUTHENTICATION_ERROR = SymfonySecurity::AUTHENTICATION_ERROR;
 
-    public const LastUsername = SymfonySecurity::LAST_USERNAME;
+    public const LAST_USERNAME = SymfonySecurity::LAST_USERNAME;
 
-    public const MaxUsernameLength = SymfonySecurity::MAX_USERNAME_LENGTH;
+    public const MAX_USERNAME_LENGTH = SymfonySecurity::MAX_USERNAME_LENGTH;
 
     private AuthorizationCheckerInterface $authorizationChecker;
 
@@ -123,7 +123,7 @@ final class Security implements AuthorizationCheckerInterface
      * Convenience method for authenticating the user and returning the
      * Response *if any* for success.
      */
-    public function authenticate(User $user, Request $request, string $firewall = self::Firewall): Response
+    public function authenticate(User $user, Request $request, string $firewall = self::FIREWALL): Response
     {
         $response = $this->guardAuthenticatorHandler->authenticateUserAndHandleSuccess($user, $request, $this->authenticator, $firewall);
         $response ??= new RedirectResponse($this->urlGenerator->generate('index'));

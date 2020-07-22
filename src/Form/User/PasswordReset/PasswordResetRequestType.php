@@ -21,12 +21,12 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 final class PasswordResetRequestType extends AbstractType
 {
-    public const EmailField = 'email';
+    public const EMAIL_FIELD = 'email';
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add(self::EmailField, EmailType::class, [
+            ->add(self::EMAIL_FIELD, EmailType::class, [
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Please enter your email.',

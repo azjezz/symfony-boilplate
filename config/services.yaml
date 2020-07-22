@@ -5,6 +5,8 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     site_name: Starter
+    site_favicon: symfony.ico # image name under assets/images
+    site_logo: symfony.svg # image name under assets/images
 
 services:
     # default configuration for services in *this* file
