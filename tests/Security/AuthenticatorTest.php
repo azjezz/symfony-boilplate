@@ -75,9 +75,7 @@ final class AuthenticatorTest extends TestCase
             '_csrf_token' => 'secret',
         ]);
 
-        $session->expects($this->once())
-            ->method('set')
-            ->with(Security::LAST_USERNAME, 'azjezz');
+        $session->expects($this->once())->method('set')->with(Security::LAST_USERNAME, 'azjezz');
 
         $credentials = $authenticator->getCredentials($request);
 
@@ -91,7 +89,7 @@ final class AuthenticatorTest extends TestCase
         ]);
 
         $this->expectException(BadRequestException::class);
-        $this->expectExceptionMessage('Invalid value for "username" field.');
+        $this->expectExceptionMessage('Invalid credentials.');
 
         $authenticator->getCredentials($request);
     }
