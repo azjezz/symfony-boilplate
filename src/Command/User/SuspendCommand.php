@@ -77,7 +77,7 @@ final class SuspendCommand extends Command
         }
 
         /** @var string $reason */
-        $reason = $io->ask('What is the reason for this suspension', null, static function (?string $answer): ?string {
+        $reason = $io->ask('What is the reason for this suspension', null, static function (?string $answer): string {
             Psl\invariant(null !== $answer && !Str\is_empty($answer), 'You must specify a reason for the suspension.');
 
             return $answer;

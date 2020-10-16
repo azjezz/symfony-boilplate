@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Security;
 
 use App\Entity\User;
-use Psl\Str;
+use Psl\Type;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -67,26 +67,18 @@ final class Authenticator extends AbstractFormLoginAuthenticator implements Pass
      */
     public function getCredentials(Request $request): array
     {
-        $input = $request->request->all();
-
-        /** @var array{username: string, password: string, csrf_token: string} $credentials */
-        $credentials = [
-            'username' => $input['username'] ?? null,
-            'password' => $input['password'] ?? null,
-            'csrf_token' => $input['_csrf_token'] ?? null,
-        ];
-
-        /** @var string $field */
-        foreach ($credentials as $field => $value) {
-            if (!Str\is_string($value)) {
-                throw new BadRequestException(Str\format('Invalid value for "%s" field.', $field));
-            }
+        try {
+            /** @var array{username: string, password: string, csrf_token: string} $credentials */
+            $credentials = [
+                'username' => Type\string()->assert($request->request->get('username')),
+                'password' => Type\string()->assert($request->request->get('password')),
+                'csrf_token' => Type\string()->assert($request->request->get('_csrf_token')),
+            ];
+        } catch (Type\Exception\AssertException $_) {
+            throw new BadRequestException('Invalid credentials.');
         }
 
-        $request->getSession()->set(
-            Security::LAST_USERNAME,
-            $credentials['username']
-        );
+        $request->getSession()->set(Security::LAST_USERNAME, $credentials['username']);
 
         return $credentials;
     }

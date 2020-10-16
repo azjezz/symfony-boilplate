@@ -19,22 +19,31 @@ use Throwable;
 
 final class UnsupportedMimeTypeException extends InvalidArgumentException implements ExceptionInterface
 {
-    private iterable $supportedMimeTypes;
+    /**
+     * @psalm-var list<string>
+     */
+    private array $supportedMimeTypes;
 
-    private string  $suppliedMimeType;
+    private string $suppliedMimeType;
 
-    public function __construct(iterable $supportedMimeTypes, ?string $suppliedMimeType, int $code = 0, Throwable $previous = null)
+    /**
+     * @psalm-param list<string> $supportedMimeTypes
+     */
+    public function __construct(array $supportedMimeTypes, ?string $suppliedMimeType, int $code = 0, Throwable $previous = null)
     {
         $this->supportedMimeTypes = $supportedMimeTypes;
         $this->suppliedMimeType = $suppliedMimeType ?? '(unknown)';
         parent::__construct(Str\format(
             'Unsupported mime type "%s", only the following mime types are supported: %s.',
-            $suppliedMimeType,
+            $this->suppliedMimeType,
             Str\join($supportedMimeTypes, ',')
         ), $code, $previous);
     }
 
-    public function getSupportedMimeTypes(): iterable
+    /**
+     * @psalm-return list<string>
+     */
+    public function getSupportedMimeTypes(): array
     {
         return $this->supportedMimeTypes;
     }
