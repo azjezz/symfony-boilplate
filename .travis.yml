@@ -26,6 +26,7 @@ cache:
     - $HOME/.composer/cache/files
 
 install:
+  - composer self-update --2
   - php --version
   - composer --version
   - node --version
