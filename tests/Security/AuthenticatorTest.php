@@ -28,9 +28,7 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 final class AuthenticatorTest extends TestCase
 {
-    public array
-
- $fixtures = [
+    public array $fixtures = [
         UserFixture::class,
     ];
 
